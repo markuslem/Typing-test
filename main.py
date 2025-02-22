@@ -34,20 +34,20 @@ text_obj_list = list()
 
 
 # creating a tuple of the words on the Wikipedia page to word_tuple
-word_tuple = tuple()
+word_list = list()
 for sentence in get_text():
     sentence = sentence.split(" ")
     for word in sentence:
-        word_tuple += (word,)
+        word_list.append(word)
 
 
 
 
 line_length = 0 # character count in one line
-for i in range(len(word_tuple)):
-    text = tk.Label(window, text=word_tuple[i], font=("Arial", 18))
+for i in range(len(word_list)):
+    text = tk.Label(window, text=word_list[i], font=("Arial", 18))
     text_obj_list.append(text)
-    line_length += len(word_tuple[i])
+    line_length += len(word_list[i])
 
     if i == 0:
         first_in_line = text
@@ -55,14 +55,14 @@ for i in range(len(word_tuple)):
         text.config(fg="grey")
 
     
-    elif line_length >= 80:
+    elif line_length >= 70: # The maximum length of a line in characters
         
-        text.place(in_=first_in_line, rely=1.0, x=-2)
+        text.place(in_=first_in_line, rely=1.0, x=-1)
         first_in_line = text #first word/object in the next line
         line_length = 0
 
     else:
-        text.place(in_=text_obj_list[i-1], relx=1.0, y=-2)
+        text.place(in_=text_obj_list[i-1], relx=1.0, y=-1)
     window.update()
 
 wpm = 0
@@ -104,7 +104,7 @@ def word_written(*args):
 
     # the word turns red, if the input is incorrect and back to grey if it's correct
     global correct_words
-    current_word = word_tuple[correct_words] + " "
+    current_word = word_list[correct_words] + " "
     if unidecode.unidecode(current_word[:len(input)]) != unidecode.unidecode(input):
         text_obj_list[correct_words].config(fg="red")
         textbox.config(fg="red")
@@ -113,7 +113,7 @@ def word_written(*args):
         textbox.config(fg="black")
 
     # moves on to the next word if correct
-    if len(input) > 0 and input[-1] == " " and end == False and unidecode.unidecode(input[:-1]) == unidecode.unidecode(word_tuple[correct_words]):
+    if len(input) > 0 and input[-1] == " " and end == False and unidecode.unidecode(input[:-1]) == unidecode.unidecode(word_list[correct_words]):
         textbox.delete(0, tk.END)
         text_obj_list[correct_words+1].config(fg="grey")
         text_obj_list[correct_words].config(fg="black")
